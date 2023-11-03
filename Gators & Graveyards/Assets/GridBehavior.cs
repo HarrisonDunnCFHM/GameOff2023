@@ -11,13 +11,13 @@ public class GridBehavior : MonoBehaviour
     [SerializeField] GameObject gridPointPrefab;
     [SerializeField] Vector3 bottomLeftLocation = new Vector3(0, 0, 0);
 
-    [SerializeField] GameObject[,] gridArray;
+    public GameObject[,] gridArray;
     [SerializeField] int startX = 0;
     [SerializeField] int startY = 0;
     [SerializeField] int endX = 2;
     [SerializeField] int endY = 2;
 
-    [SerializeField] List<GameObject> path = new List<GameObject>();
+    public List<GameObject> path = new List<GameObject>();
 
     // Start is called before the first frame update
     void Awake()
@@ -41,6 +41,16 @@ public class GridBehavior : MonoBehaviour
         }
     }
 
+    public void FindPath(int x, int y, int destX, int destY)
+    {
+        startX = x;
+        startY = y;
+        endX = destX;
+        endY = destY;
+        SetDistance();
+        SetPath();
+    }
+
     void GenerateGrid()
     {
         for (int x = 0; x < columns; x++)
@@ -52,7 +62,8 @@ public class GridBehavior : MonoBehaviour
                 newGridPoint.transform.SetParent(gameObject.transform);
                 newGridPoint.GetComponent<GridStats>().x = x;
                 newGridPoint.GetComponent<GridStats>().y = y;
-
+                newGridPoint.GetComponent<GridStats>().myCoords.text = x + " , " + y;
+                newGridPoint.name = newGridPoint.GetComponent<GridStats>().myCoords.text;
                 gridArray[x, y] = newGridPoint;
             }
         }
