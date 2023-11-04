@@ -7,7 +7,11 @@ public class GridMouseover : MonoBehaviour
     [SerializeField] SpriteRenderer myRenderer;
     [SerializeField] Color defaultColor;
     [SerializeField] Color hoveredColor;
+    [SerializeField] Color inRangeColor;
     [SerializeField] Collider myCollider;
+
+    public bool inRange;
+    bool hovered;
 
     GameObject hoveredPoint;
 
@@ -26,18 +30,34 @@ public class GridMouseover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        UpdateTileColor();
+    }
+
+    void UpdateTileColor()
+    {
+        if (hovered)
+        {
+            myRenderer.color = hoveredColor;
+        }
+        else if (inRange)
+        {
+            myRenderer.color = inRangeColor;
+        }
+        else
+        {
+            myRenderer.color = defaultColor;
+        }
     }
 
     private void OnMouseEnter()
     {
-        myRenderer.color = hoveredColor;
+        hovered = true;
         hoveredPoint = gameObject;
     }
 
     private void OnMouseExit()
     {
-        myRenderer.color = defaultColor;
+        hovered = false;
         hoveredPoint = null;
     }
 
@@ -45,11 +65,14 @@ public class GridMouseover : MonoBehaviour
     {
         if(hoveredPoint && characterSelector.selectedCharacter)
         {
-            
-            gridBehavior.FindPath(characterSelector.selectedCharacter.currentGridPosition.x,
-                                characterSelector.selectedCharacter.currentGridPosition.y, 
-                                myGridStats.x, myGridStats.y);
-            StartCoroutine(characterSelector.selectedCharacter.MoveCharacter(myGridStats.x, myGridStats.y));
+
+            if (gridBehavior.FindPath(characterSelector.selectedCharacter.currentGridPosition.x,
+                                characterSelector.selectedCharacter.currentGridPosition.y,
+                                myGridStats.x, myGridStats.y,
+                                characterSelector.selectedCharacter.GetComponent<ScoutStats>().maxMoveRange))
+            {
+                StartCoroutine(characterSelector.selectedCharacter.MoveCharacter(myGridStats.x, myGridStats.y));
+            }
         }
     }
 

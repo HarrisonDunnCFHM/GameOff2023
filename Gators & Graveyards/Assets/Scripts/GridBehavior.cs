@@ -33,22 +33,19 @@ public class GridBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(findDistance)
-        {
-            SetDistance();
-            SetPath();
-            findDistance = false;
-        }
+       
     }
 
-    public void FindPath(int x, int y, int destX, int destY)
+    public bool FindPath(int x, int y, int destX, int destY, int moveRange)
     {
         startX = x;
         startY = y;
         endX = destX;
         endY = destY;
-        SetDistance();
-        SetPath();
+        SetDistance(moveRange);
+        if (SetPath())
+            return true; 
+        else return false ;
     }
 
     void GenerateGrid()
@@ -69,13 +66,13 @@ public class GridBehavior : MonoBehaviour
         }
     }
 
-    void SetDistance()
+    void SetDistance(int moveRange)
     {
         InitialGridSetup();
         int x = startX;
         int y = startY;
         int[] testArray = new int[rows * columns];
-        for (int step = 1; step < rows * columns; step++)
+        for (int step = 1; step <= moveRange; step++)
         {
             foreach(GameObject point in gridArray)
             {
@@ -87,7 +84,7 @@ public class GridBehavior : MonoBehaviour
         }
     }
 
-    void SetPath()
+    bool SetPath()
     {
         int step;
         int x = endX;
@@ -102,7 +99,7 @@ public class GridBehavior : MonoBehaviour
         else
         {
             Debug.Log("can't reach the desired location!");
-            return;
+            return false;
         }
         for (int i = step; step > -1; step--)
         {
@@ -120,15 +117,18 @@ public class GridBehavior : MonoBehaviour
             y = tempObj.GetComponent<GridStats>().y;
             tempList.Clear();
         }
+        return true;
     }
 
-    void InitialGridSetup()
+    public void InitialGridSetup()
     {
         foreach(GameObject point in gridArray)
         {
             point.GetComponent<GridStats>().visited = -1;
+            point.GetComponent<GridMouseover>().inRange = false;
         }
         gridArray[startX, startY].GetComponent<GridStats>().visited = 0;
+        //occupied spaces need to be set to 0 here
     }
 
     bool TestDirection(int x, int y, int step, int direction)
@@ -183,6 +183,7 @@ public class GridBehavior : MonoBehaviour
         if (gridArray[x,y])
         {
             gridArray[x, y].GetComponent<GridStats>().visited = step;
+            gridArray[x, y].GetComponent<GridMouseover>().inRange = true;
         }
     }
 

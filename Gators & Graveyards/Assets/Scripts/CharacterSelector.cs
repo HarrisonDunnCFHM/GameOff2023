@@ -12,11 +12,14 @@ public class CharacterSelector : MonoBehaviour
 
     public CharacterMover selectedCharacter;
     public float moveTime = 0.2f;
+
+    GridBehavior gridBehavior;
     
     // Start is called before the first frame update
     void Start()
     {
         activeCharacters = FindObjectsOfType<CharacterMover>();
+        gridBehavior = FindObjectOfType<GridBehavior>();
     }
 
     // Update is called once per frame
@@ -40,11 +43,20 @@ public class CharacterSelector : MonoBehaviour
         if(clickedCharacter)
         {
             selectedCharacter = clickedCharacter;
+            UpdateMovesInRange();
         }
         else
             selectedCharacter = null;
     }
 
-   
+   void UpdateMovesInRange()
+    {
+        gridBehavior.FindPath(selectedCharacter.currentGridPosition.x,
+                                selectedCharacter.currentGridPosition.y,
+                                selectedCharacter.currentGridPosition.x,
+                                selectedCharacter.currentGridPosition.y,
+                                selectedCharacter.GetComponent<ScoutStats>().maxMoveRange);
+
+    }
 
 }

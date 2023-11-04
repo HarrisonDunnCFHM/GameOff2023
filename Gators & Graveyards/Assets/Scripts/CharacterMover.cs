@@ -53,6 +53,8 @@ public class CharacterMover : MonoBehaviour
             transform.position = gridBehavior.path[step - 1].transform.position;
             currentGridPosition = new Vector2Int(gridBehavior.path[step - 1].GetComponent<GridStats>().x, gridBehavior.path[step - 1].GetComponent<GridStats>().y);
         }
+        gridBehavior.InitialGridSetup();
+        charactorSelector.selectedCharacter = null;
         yield return null;
     }
 }

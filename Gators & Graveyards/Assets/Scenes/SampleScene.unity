@@ -302,6 +302,7 @@ GameObject:
   - component: {fileID: 504915496}
   - component: {fileID: 504915495}
   - component: {fileID: 504915497}
+  - component: {fileID: 504915498}
   m_Layer: 0
   m_Name: Gator Scout
   m_TagString: Untagged
@@ -355,6 +356,19 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &504915498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504915494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc3ccd56420903e45bf04f307830a7ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxMoveRange: 4
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,6 +474,7 @@ GameObject:
   - component: {fileID: 751941827}
   - component: {fileID: 751941826}
   - component: {fileID: 751941825}
+  - component: {fileID: 751941828}
   m_Layer: 0
   m_Name: Gator Scout (1)
   m_TagString: Untagged
@@ -513,6 +528,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &751941828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 751941824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc3ccd56420903e45bf04f307830a7ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxMoveRange: 4
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

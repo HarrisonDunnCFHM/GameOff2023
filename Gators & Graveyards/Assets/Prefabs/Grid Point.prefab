@@ -45,7 +45,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5266701152418880023}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -248,7 +248,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.02963687, g: 0.4627451, b: 0.06811116, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -311,7 +311,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6861093415246727164}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -375,9 +375,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myRenderer: {fileID: 5158074234560977508}
-  defaultColor: {r: 0.2627451, g: 0.59607846, b: 0.24313727, a: 0}
+  defaultColor: {r: 0.2627451, g: 0.59607846, b: 0.24313727, a: 1}
   hoveredColor: {r: 0.5209329, g: 1, b: 0.3537736, a: 0.3882353}
+  inRangeColor: {r: 0.051886797, g: 0.7640556, b: 1, a: 0.54509807}
   myCollider: {fileID: 0}
+  inRange: 0
 --- !u!65 &570276960848386589
 BoxCollider:
   m_ObjectHideFlags: 0
