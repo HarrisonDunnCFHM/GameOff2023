@@ -376,9 +376,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myRenderer: {fileID: 5158074234560977508}
   defaultColor: {r: 0.2627451, g: 0.59607846, b: 0.24313727, a: 1}
-  hoveredColor: {r: 0.5209329, g: 1, b: 0.3537736, a: 0.3882353}
-  inRangeColor: {r: 0.051886797, g: 0.7640556, b: 1, a: 0.54509807}
+  hoveredColor: {r: 0.94509804, g: 0.8554348, b: 0.02352941, a: 1}
+  inRangeColor: {r: 0.051886797, g: 0.7640556, b: 1, a: 1}
   myCollider: {fileID: 0}
+  pathIndicatorPrefab: {fileID: 1585799691988394544, guid: 6526f8c968b0b214da35fa1e026d02c5, type: 3}
   inRange: 0
 --- !u!65 &570276960848386589
 BoxCollider:

@@ -14,6 +14,7 @@ public class CharacterSelector : MonoBehaviour
     public float moveTime = 0.2f;
 
     GridBehavior gridBehavior;
+    public GameObject hoveredTile;
     
     // Start is called before the first frame update
     void Start()
@@ -25,7 +26,13 @@ public class CharacterSelector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        foreach(CharacterMover character in activeCharacters)
+        UpdateCharacterSelectedIndicator();
+        //UpdateMovePathIndicator();
+    }
+
+    private void UpdateCharacterSelectedIndicator()
+    {
+        foreach (CharacterMover character in activeCharacters)
         {
             if (character == selectedCharacter)
             {
@@ -37,6 +44,27 @@ public class CharacterSelector : MonoBehaviour
             }
         }
     }
+
+    //private void UpdateMovePathIndicator()
+    //{
+    //   if (selectedCharacter && hoveredTile.GetComponent<GridStats>().visited > -1)
+    //   {
+    //        Debug.Log("Tile in range!");
+    //        if(pathIndicator == null)
+    //        {
+    //            GameObject newPath = Instantiate(pathIndicatorPrefab, selectedCharacter.transform.position, Quaternion.identity);
+    //            pathIndicator = newPath.GetComponent<MovePathIndicator>();
+    //        }
+    //        else
+    //        {
+    //            pathIndicator.DisplayMovePathIndicator(gridBehavior,
+    //                selectedCharacter.currentGridPosition.x,
+    //                selectedCharacter.currentGridPosition.y,
+    //                hoveredTile.GetComponent<GridStats>().x,
+    //                hoveredTile.GetComponent<GridStats>().y);
+    //        }
+    //   }
+    //}
 
     public void SelectCharacter(CharacterMover clickedCharacter)
     {

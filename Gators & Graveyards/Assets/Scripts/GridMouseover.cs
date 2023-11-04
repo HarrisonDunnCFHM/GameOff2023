@@ -9,6 +9,8 @@ public class GridMouseover : MonoBehaviour
     [SerializeField] Color hoveredColor;
     [SerializeField] Color inRangeColor;
     [SerializeField] Collider myCollider;
+    [SerializeField] GameObject pathIndicatorPrefab;
+    MovePathIndicator pathIndicator;
 
     public bool inRange;
     bool hovered;
@@ -53,12 +55,33 @@ public class GridMouseover : MonoBehaviour
     {
         hovered = true;
         hoveredPoint = gameObject;
+        characterSelector.hoveredTile = gameObject;
+
+        if (characterSelector.selectedCharacter)
+        {
+
+            if (gridBehavior.FindPath(characterSelector.selectedCharacter.currentGridPosition.x,
+                                characterSelector.selectedCharacter.currentGridPosition.y,
+                                myGridStats.x, myGridStats.y,
+                                characterSelector.selectedCharacter.GetComponent<ScoutStats>().maxMoveRange))
+            {
+                GameObject newPath = Instantiate(pathIndicatorPrefab, characterSelector.selectedCharacter.transform.position, Quaternion.identity);
+                pathIndicator = newPath.GetComponent<MovePathIndicator>();
+                pathIndicator.GenerateMovePathIndicator(gridBehavior.path);
+            }
+        }
     }
 
     private void OnMouseExit()
     {
         hovered = false;
         hoveredPoint = null;
+
+        if(pathIndicator)
+        {
+            Destroy(pathIndicator.gameObject);
+            pathIndicator = null;
+        }
     }
 
     private void OnMouseDown()
