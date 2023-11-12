@@ -18,6 +18,7 @@ public class CharacterMover : MonoBehaviour
 
     public List<GameObject> MovePath = new List<GameObject>();
 
+    public bool attacking = false;
 
     CharacterSelector charactorSelector;
 
@@ -81,7 +82,7 @@ public class CharacterMover : MonoBehaviour
         CharacterMover[] allCharacters = FindObjectsOfType<CharacterMover>();
         foreach (CharacterMover character in allCharacters)
         {
-            if (GetComponent<ScoutStats>() && character.GetComponent<GhostStats>())
+            if (GetComponent<ScoutStats>() && character.GetComponent<GhostStats>() && !attacking)
             {
                 gridPointArray[character.currentGridPosition.x, character.currentGridPosition.y].GetComponent<GridPointStats>().visited = -2;
             }
@@ -225,7 +226,21 @@ public class CharacterMover : MonoBehaviour
             transform.position = tempPath[step - 1].transform.position;
             currentGridPosition = new Vector2Int(tempPath[step - 1].GetComponent<GridPointStats>().x, tempPath[step - 1].GetComponent<GridPointStats>().y);
         }
-        
+
+        //attack nearby ghosts
+        attacking = true;
+        GhostStats[] allGhosts = FindObjectsOfType<GhostStats>();
+        foreach (GhostStats ghost in allGhosts)
+        {
+            Vector2Int ghostPos = ghost.GetComponent<CharacterMover>().currentGridPosition;
+            if(GenerateMovePath(currentGridPosition.x, currentGridPosition.y, ghostPos.x, ghostPos.y,1))
+            {
+                ghost.GetComponent<CharacterHealth>().TakeDamage(1);
+            }
+        }
+        attacking = false;
+
+        //reset movement stuff
         InitialGridSetup();
         if(GetComponent<ScoutStats>())
         {

@@ -219,6 +219,7 @@ GameObject:
   - component: {fileID: 98310764}
   - component: {fileID: 98310763}
   - component: {fileID: 98310762}
+  - component: {fileID: 98310765}
   m_Layer: 0
   m_Name: Ghost
   m_TagString: Untagged
@@ -282,6 +283,21 @@ MonoBehaviour:
   currentGridPosition: {x: 0, y: 0}
   mySprite: {fileID: 46798430}
   moveTime: 0.8
+  MovePath: []
+--- !u!114 &98310765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98310760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4b7ceb6a6890d040bcba24e3338a398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1
+  currentHealth: 0
 --- !u!1 &105813639
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,6 +546,7 @@ GameObject:
   - component: {fileID: 504915497}
   - component: {fileID: 504915498}
   - component: {fileID: 504915499}
+  - component: {fileID: 504915500}
   m_Layer: 0
   m_Name: Gator Scout
   m_TagString: Untagged
@@ -553,6 +570,7 @@ MonoBehaviour:
   currentGridPosition: {x: 0, y: 0}
   mySprite: {fileID: 225769010}
   moveTime: 0.8
+  MovePath: []
 --- !u!4 &504915496
 Transform:
   m_ObjectHideFlags: 0
@@ -614,6 +632,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myRenderer: {fileID: 225769010}
+--- !u!114 &504915500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504915494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4b7ceb6a6890d040bcba24e3338a398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1
+  currentHealth: 0
 --- !u!1 &593984854
 GameObject:
   m_ObjectHideFlags: 0
@@ -626,6 +658,7 @@ GameObject:
   - component: {fileID: 593984857}
   - component: {fileID: 593984856}
   - component: {fileID: 593984855}
+  - component: {fileID: 593984859}
   m_Layer: 0
   m_Name: Ghost (1)
   m_TagString: Untagged
@@ -673,6 +706,7 @@ MonoBehaviour:
   currentGridPosition: {x: 0, y: 0}
   mySprite: {fileID: 719127348}
   moveTime: 0.8
+  MovePath: []
 --- !u!4 &593984858
 Transform:
   m_ObjectHideFlags: 0
@@ -689,6 +723,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &593984859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 593984854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4b7ceb6a6890d040bcba24e3338a398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1
+  currentHealth: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,6 +928,7 @@ GameObject:
   - component: {fileID: 751941825}
   - component: {fileID: 751941828}
   - component: {fileID: 751941829}
+  - component: {fileID: 751941830}
   m_Layer: 0
   m_Name: Gator Scout (1)
   m_TagString: Untagged
@@ -917,6 +966,7 @@ MonoBehaviour:
   currentGridPosition: {x: 0, y: 0}
   mySprite: {fileID: 105813640}
   moveTime: 0.8
+  MovePath: []
 --- !u!4 &751941827
 Transform:
   m_ObjectHideFlags: 0
@@ -964,6 +1014,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myRenderer: {fileID: 105813640}
+--- !u!114 &751941830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 751941824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4b7ceb6a6890d040bcba24e3338a398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1
+  currentHealth: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1146,8 +1210,6 @@ MonoBehaviour:
   gridScale: 1
   gridPointPrefab: {fileID: 6861093415246727164, guid: 44f4b67de536c8f4ba7def889f0e002d, type: 3}
   bottomLeftLocation: {x: 0, y: 0, z: 0}
-  MovingCharacter: {fileID: 0}
-  MovePath: []
 --- !u!4 &1099809294
 Transform:
   m_ObjectHideFlags: 0
