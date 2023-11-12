@@ -13,7 +13,6 @@ public class CharacterSelector : MonoBehaviour
     public CharacterMover selectedCharacter;
     public float moveTime = 0.2f;
 
-    GridBehavior gridBehavior;
     public GameObject hoveredTile;
 
     public bool resolvingMove = false;
@@ -23,7 +22,6 @@ public class CharacterSelector : MonoBehaviour
     void Start()
     {
         activeCharacters = FindObjectsOfType<CharacterMover>();
-        gridBehavior = FindObjectOfType<GridBehavior>();
     }
 
     // Update is called once per frame
@@ -59,16 +57,16 @@ public class CharacterSelector : MonoBehaviour
             selectedCharacter = null;
     }
 
-   void UpdateMovesInRange()
+    void UpdateMovesInRange()
     {
         if (resolvingMove) { return; }
 
-        gridBehavior.GenerateMovePath(selectedCharacter,
-                                selectedCharacter.currentGridPosition.x,
-                                selectedCharacter.currentGridPosition.y,
-                                selectedCharacter.currentGridPosition.x,
-                                selectedCharacter.currentGridPosition.y,
-                                selectedCharacter.GetComponent<ScoutStats>().maxMoveRange);
+        selectedCharacter.GenerateMovePath(
+            selectedCharacter.currentGridPosition.x,
+            selectedCharacter.currentGridPosition.y,
+            selectedCharacter.currentGridPosition.x,
+            selectedCharacter.currentGridPosition.y,
+            selectedCharacter.GetComponent<ScoutStats>().maxMoveRange);
 
     }
 

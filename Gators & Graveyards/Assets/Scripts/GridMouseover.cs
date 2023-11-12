@@ -17,14 +17,12 @@ public class GridMouseover : MonoBehaviour
 
     GameObject hoveredPoint;
 
-    GridBehavior gridBehavior;
     GridPointStats myGridStats;
     CharacterSelector characterSelector;
 
     // Start is called before the first frame update
     void Start()
     {
-        gridBehavior = FindObjectOfType<GridBehavior>();
         myGridStats = GetComponent<GridPointStats>();
         characterSelector = FindObjectOfType<CharacterSelector>();
     }
@@ -67,15 +65,14 @@ public class GridMouseover : MonoBehaviour
         {
 
 
-            if (gridBehavior.GenerateMovePath(characterSelector.selectedCharacter, 
-                                characterSelector.selectedCharacter.currentGridPosition.x,
+            if (characterSelector.selectedCharacter.GenerateMovePath(characterSelector.selectedCharacter.currentGridPosition.x,
                                 characterSelector.selectedCharacter.currentGridPosition.y,
                                 myGridStats.x, myGridStats.y,
                                 characterSelector.selectedCharacter.GetComponent<ScoutStats>().maxMoveRange))
             {
                 GameObject newPath = Instantiate(pathIndicatorPrefab, characterSelector.selectedCharacter.transform.position, Quaternion.identity);
                 pathIndicator = newPath.GetComponent<MovePathIndicator>();
-                List<GameObject> tempPath = gridBehavior.MovePath;
+                List<GameObject> tempPath = characterSelector.selectedCharacter.MovePath;
                 pathIndicator.GenerateMovePathIndicator(tempPath);
             }
         }
@@ -98,8 +95,7 @@ public class GridMouseover : MonoBehaviour
         if(hoveredPoint && characterSelector.selectedCharacter && !myGridStats.occupied)
         {
 
-            if (gridBehavior.GenerateMovePath(characterSelector.selectedCharacter, 
-                                characterSelector.selectedCharacter.currentGridPosition.x,
+            if (characterSelector.selectedCharacter.GenerateMovePath(characterSelector.selectedCharacter.currentGridPosition.x,
                                 characterSelector.selectedCharacter.currentGridPosition.y,
                                 myGridStats.x, myGridStats.y,
                                 characterSelector.selectedCharacter.GetComponent<ScoutStats>().maxMoveRange))
