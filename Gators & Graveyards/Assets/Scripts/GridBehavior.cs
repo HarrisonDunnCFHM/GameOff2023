@@ -17,7 +17,7 @@ public class GridBehavior : MonoBehaviour
     int _moveEndX = 2;
     int _moveEndY = 2;
 
-    public GameObject MovingCharacter;
+    public CharacterMover MovingCharacter;
 
     public List<GameObject> MovePath = new List<GameObject>();
 
@@ -59,8 +59,9 @@ public class GridBehavior : MonoBehaviour
         }
     }
 
-    public bool GenerateMovePath(int startX, int startY, int endX, int endY, int moveRange)
+    public bool GenerateMovePath(CharacterMover movingCharacter, int startX, int startY, int endX, int endY, int moveRange)
     {
+        MovingCharacter = movingCharacter;
         _moveStartX = startX;
         _moveStartY = startY;
         _moveEndX = endX;
@@ -138,14 +139,15 @@ public class GridBehavior : MonoBehaviour
         }
         //occupied spaces need to be set to -2 here
         CharacterMover[] allCharacters = FindObjectsOfType<CharacterMover>();
-        if (MovingCharacter == null)
-        {
-            MovingCharacter = FindObjectOfType<CharacterSelector>().selectedCharacter.gameObject;
-        }
+        //if (MovingCharacter == null)
+        //{
+        //    MovingCharacter = FindObjectOfType<CharacterSelector>().selectedCharacter.gameObject;
+        //}
         foreach(CharacterMover character in allCharacters)
         {
             if (MovingCharacter && MovingCharacter.GetComponent<ScoutStats>() && character.GetComponent<GhostStats>())
             {
+                Debug.Log(character.name + " is at point " + character.currentGridPosition.x + "," + character.currentGridPosition.y);
                 gridPointArray[character.currentGridPosition.x, character.currentGridPosition.y].GetComponent<GridPointStats>().visited = -2;
             }
             //else if (movingCharacter && movingCharacter.GetComponent<GhostStats>() && character.GetComponent<ScoutStats>())

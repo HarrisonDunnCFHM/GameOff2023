@@ -63,7 +63,8 @@ public class CharacterSelector : MonoBehaviour
     {
         if (resolvingMove) { return; }
 
-        gridBehavior.GenerateMovePath(selectedCharacter.currentGridPosition.x,
+        gridBehavior.GenerateMovePath(selectedCharacter,
+                                selectedCharacter.currentGridPosition.x,
                                 selectedCharacter.currentGridPosition.y,
                                 selectedCharacter.currentGridPosition.x,
                                 selectedCharacter.currentGridPosition.y,

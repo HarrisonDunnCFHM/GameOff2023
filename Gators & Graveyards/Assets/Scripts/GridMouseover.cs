@@ -38,7 +38,11 @@ public class GridMouseover : MonoBehaviour
     void UpdateTileColor()
     {
         if(characterSelector.resolvingMove) { return; }
-        if (hovered)
+        if(GetComponent<GridPointStats>().occupied)
+        {
+            myRenderer.color = defaultColor;
+        }
+        else if (hovered)
         {
             myRenderer.color = hoveredColor;
         }
@@ -63,7 +67,8 @@ public class GridMouseover : MonoBehaviour
         {
 
 
-            if (gridBehavior.GenerateMovePath(characterSelector.selectedCharacter.currentGridPosition.x,
+            if (gridBehavior.GenerateMovePath(characterSelector.selectedCharacter, 
+                                characterSelector.selectedCharacter.currentGridPosition.x,
                                 characterSelector.selectedCharacter.currentGridPosition.y,
                                 myGridStats.x, myGridStats.y,
                                 characterSelector.selectedCharacter.GetComponent<ScoutStats>().maxMoveRange))
@@ -93,7 +98,8 @@ public class GridMouseover : MonoBehaviour
         if(hoveredPoint && characterSelector.selectedCharacter && !myGridStats.occupied)
         {
 
-            if (gridBehavior.GenerateMovePath(characterSelector.selectedCharacter.currentGridPosition.x,
+            if (gridBehavior.GenerateMovePath(characterSelector.selectedCharacter, 
+                                characterSelector.selectedCharacter.currentGridPosition.x,
                                 characterSelector.selectedCharacter.currentGridPosition.y,
                                 myGridStats.x, myGridStats.y,
                                 characterSelector.selectedCharacter.GetComponent<ScoutStats>().maxMoveRange))

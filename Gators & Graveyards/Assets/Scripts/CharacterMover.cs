@@ -41,19 +41,16 @@ public class CharacterMover : MonoBehaviour
 
     public IEnumerator MoveCharacterCoroutine(int x, int y)
     {
-        
-        
         charactorSelector.resolvingMove = true;
         moveTime = charactorSelector.moveTime;
-        List<GameObject> tempPath = gridBehavior.MovePath;
-
-        gridBehavior.gridPointArray[tempPath[tempPath.Count - 1].GetComponent<GridPointStats>().x, tempPath[tempPath.Count - 1].GetComponent<GridPointStats>().y].GetComponent<GridPointStats>().occupied = false;
         if(GetComponent<GhostStats>())
         {
             int moveRange;
             //moveRange = GetComponent<GhostStats>().maxMoveRange;
-            gridBehavior.GenerateMovePath(currentGridPosition.x, currentGridPosition.y, x, y, 99);
+            gridBehavior.GenerateMovePath(this, currentGridPosition.x, currentGridPosition.y, x, y, 99);
         }
+        gridBehavior.gridPointArray[gridBehavior.MovePath[gridBehavior.MovePath.Count - 1].GetComponent<GridPointStats>().x, gridBehavior.MovePath[gridBehavior.MovePath.Count - 1].GetComponent<GridPointStats>().y].GetComponent<GridPointStats>().occupied = false;
+        List<GameObject> tempPath = new List<GameObject>(gridBehavior.MovePath);
         for (int step = tempPath.Count - 1; step > 0; step--)
         {
             float elapsed = 0f;
@@ -68,11 +65,11 @@ public class CharacterMover : MonoBehaviour
         }
         if(GetComponent<GhostStats>())
         {
-            gridBehavior.MovingCharacter = gameObject;
+            gridBehavior.MovingCharacter = this;
         }
         else
         {
-            gridBehavior.MovingCharacter = charactorSelector.selectedCharacter.gameObject;
+            gridBehavior.MovingCharacter = charactorSelector.selectedCharacter;
         }
         gridBehavior.InitialGridSetup();
         if(GetComponent<ScoutStats>())
