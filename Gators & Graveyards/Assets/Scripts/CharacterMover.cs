@@ -83,7 +83,10 @@ public class CharacterMover : MonoBehaviour
         {
             if (GetComponent<ScoutStats>() && character.GetComponent<GhostStats>())
             {
-                Debug.Log(character.name + " is at point " + character.currentGridPosition.x + "," + character.currentGridPosition.y);
+                gridPointArray[character.currentGridPosition.x, character.currentGridPosition.y].GetComponent<GridPointStats>().visited = -2;
+            }
+            else if (GetComponent<GhostStats>())
+            {
                 gridPointArray[character.currentGridPosition.x, character.currentGridPosition.y].GetComponent<GridPointStats>().visited = -2;
             }
         }
