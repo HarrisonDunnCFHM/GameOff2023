@@ -37,6 +37,7 @@ public class GridMouseover : MonoBehaviour
 
     void UpdateTileColor()
     {
+        if(characterSelector.resolvingMove) { return; }
         if (hovered)
         {
             myRenderer.color = hoveredColor;
@@ -57,8 +58,10 @@ public class GridMouseover : MonoBehaviour
         hoveredPoint = gameObject;
         characterSelector.hoveredTile = gameObject;
 
+        if (characterSelector.resolvingMove) { return; }
         if (characterSelector.selectedCharacter)
         {
+
 
             if (gridBehavior.FindPath(characterSelector.selectedCharacter.currentGridPosition.x,
                                 characterSelector.selectedCharacter.currentGridPosition.y,
@@ -86,7 +89,7 @@ public class GridMouseover : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if(hoveredPoint && characterSelector.selectedCharacter)
+        if(hoveredPoint && characterSelector.selectedCharacter && !myGridStats.occupied)
         {
 
             if (gridBehavior.FindPath(characterSelector.selectedCharacter.currentGridPosition.x,
@@ -94,6 +97,11 @@ public class GridMouseover : MonoBehaviour
                                 myGridStats.x, myGridStats.y,
                                 characterSelector.selectedCharacter.GetComponent<ScoutStats>().maxMoveRange))
             {
+                if (pathIndicator)
+                {
+                    Destroy(pathIndicator.gameObject);
+                    pathIndicator = null;
+                }
                 StartCoroutine(characterSelector.selectedCharacter.MoveCharacter(myGridStats.x, myGridStats.y));
             }
         }

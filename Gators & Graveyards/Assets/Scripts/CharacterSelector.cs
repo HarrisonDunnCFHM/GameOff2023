@@ -15,7 +15,10 @@ public class CharacterSelector : MonoBehaviour
 
     GridBehavior gridBehavior;
     public GameObject hoveredTile;
-    
+
+    public bool resolvingMove = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,8 +29,7 @@ public class CharacterSelector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateCharacterSelectedIndicator();
-        //UpdateMovePathIndicator();
+        //UpdateCharacterSelectedIndicator();
     }
 
     private void UpdateCharacterSelectedIndicator()
@@ -45,29 +47,9 @@ public class CharacterSelector : MonoBehaviour
         }
     }
 
-    //private void UpdateMovePathIndicator()
-    //{
-    //   if (selectedCharacter && hoveredTile.GetComponent<GridStats>().visited > -1)
-    //   {
-    //        Debug.Log("Tile in range!");
-    //        if(pathIndicator == null)
-    //        {
-    //            GameObject newPath = Instantiate(pathIndicatorPrefab, selectedCharacter.transform.position, Quaternion.identity);
-    //            pathIndicator = newPath.GetComponent<MovePathIndicator>();
-    //        }
-    //        else
-    //        {
-    //            pathIndicator.DisplayMovePathIndicator(gridBehavior,
-    //                selectedCharacter.currentGridPosition.x,
-    //                selectedCharacter.currentGridPosition.y,
-    //                hoveredTile.GetComponent<GridStats>().x,
-    //                hoveredTile.GetComponent<GridStats>().y);
-    //        }
-    //   }
-    //}
-
     public void SelectCharacter(CharacterMover clickedCharacter)
     {
+        if (resolvingMove) { return; }
         if(clickedCharacter)
         {
             selectedCharacter = clickedCharacter;
@@ -79,6 +61,8 @@ public class CharacterSelector : MonoBehaviour
 
    void UpdateMovesInRange()
     {
+        if (resolvingMove) { return; }
+
         gridBehavior.FindPath(selectedCharacter.currentGridPosition.x,
                                 selectedCharacter.currentGridPosition.y,
                                 selectedCharacter.currentGridPosition.x,

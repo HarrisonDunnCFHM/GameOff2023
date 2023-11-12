@@ -16,6 +16,7 @@ public class GridBehavior : MonoBehaviour
     [SerializeField] int startY = 0;
     [SerializeField] int endX = 2;
     [SerializeField] int endY = 2;
+    public GameObject movingCharacter;
 
     public List<GameObject> path = new List<GameObject>();
 
@@ -124,11 +125,32 @@ public class GridBehavior : MonoBehaviour
     {
         foreach(GameObject point in gridArray)
         {
-            point.GetComponent<GridStats>().visited = -1;
-            point.GetComponent<GridMouseover>().inRange = false;
+            if (point)
+            {
+                point.GetComponent<GridStats>().visited = -1;
+                point.GetComponent<GridMouseover>().inRange = false;
+            }
         }
+        //occupied spaces need to be set to -2 here
+        CharacterMover[] allCharacters = FindObjectsOfType<CharacterMover>();
+        if (movingCharacter == null)
+        {
+            movingCharacter = FindObjectOfType<CharacterSelector>().selectedCharacter.gameObject;
+        }
+        foreach(CharacterMover character in allCharacters)
+        {
+            if (movingCharacter && movingCharacter.GetComponent<ScoutStats>() && character.GetComponent<GhostStats>())
+            {
+                gridArray[character.currentGridPosition.x, character.currentGridPosition.y].GetComponent<GridStats>().visited = -2;
+            }
+            //else if (movingCharacter && movingCharacter.GetComponent<GhostStats>() && character.GetComponent<ScoutStats>())
+            //{
+            //    gridArray[character.currentGridPosition.x, character.currentGridPosition.y].GetComponent<GridStats>().visited = -2;
+            //}
+        }
+        //the movers starting space is set to 0
         gridArray[startX, startY].GetComponent<GridStats>().visited = 0;
-        //occupied spaces need to be set to 0 here
+
     }
 
     bool TestDirection(int x, int y, int step, int direction)
