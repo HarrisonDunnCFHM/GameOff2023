@@ -19,11 +19,11 @@ public class CharacterMover : MonoBehaviour
     void Start()
     {
         gridBehavior = FindObjectOfType<GridBehavior>();
-        gridArray = gridBehavior.gridArray;
+        gridArray = gridBehavior.gridPointArray;
         charactorSelector = FindObjectOfType<CharacterSelector>();
         transform.position = gridArray[startingGridPosition.x, startingGridPosition.y].transform.position;
         currentGridPosition = startingGridPosition;
-        gridArray[startingGridPosition.x, startingGridPosition.y].GetComponent<GridStats>().occupied = true;
+        gridArray[startingGridPosition.x, startingGridPosition.y].GetComponent<GridPointStats>().occupied = true;
     }
 
     // Update is called once per frame
@@ -34,23 +34,26 @@ public class CharacterMover : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (GetComponent<ScoutStats>().actionsLeft <= 0) return;
+        if (GetComponent<ScoutStats>().actionsLeft <= 0 || GetComponent<GhostStats>()) return;
         charactorSelector.SelectCharacter(this);
 
     }
 
-    public IEnumerator MoveCharacter(int x, int y)
+    public IEnumerator MoveCharacterCoroutine(int x, int y)
     {
+        
+        
         charactorSelector.resolvingMove = true;
         moveTime = charactorSelector.moveTime;
-        gridBehavior.gridArray[gridBehavior.path[gridBehavior.path.Count - 1].GetComponent<GridStats>().x, gridBehavior.path[gridBehavior.path.Count - 1].GetComponent<GridStats>().y].GetComponent<GridStats>().occupied = false;
+        List<GameObject> tempPath = gridBehavior.MovePath;
+
+        gridBehavior.gridPointArray[tempPath[tempPath.Count - 1].GetComponent<GridPointStats>().x, tempPath[tempPath.Count - 1].GetComponent<GridPointStats>().y].GetComponent<GridPointStats>().occupied = false;
         if(GetComponent<GhostStats>())
         {
             int moveRange;
             //moveRange = GetComponent<GhostStats>().maxMoveRange;
-            gridBehavior.FindPath(currentGridPosition.x, currentGridPosition.y, x, y, 99);
+            gridBehavior.GenerateMovePath(currentGridPosition.x, currentGridPosition.y, x, y, 99);
         }
-        List<GameObject> tempPath = new List<GameObject>(gridBehavior.path);
         for (int step = tempPath.Count - 1; step > 0; step--)
         {
             float elapsed = 0f;
@@ -61,22 +64,22 @@ public class CharacterMover : MonoBehaviour
                 yield return null;
             }
             transform.position = tempPath[step - 1].transform.position;
-            currentGridPosition = new Vector2Int(tempPath[step - 1].GetComponent<GridStats>().x, tempPath[step - 1].GetComponent<GridStats>().y);
+            currentGridPosition = new Vector2Int(tempPath[step - 1].GetComponent<GridPointStats>().x, tempPath[step - 1].GetComponent<GridPointStats>().y);
         }
         if(GetComponent<GhostStats>())
         {
-            gridBehavior.movingCharacter = gameObject;
+            gridBehavior.MovingCharacter = gameObject;
         }
         else
         {
-            gridBehavior.movingCharacter = charactorSelector.selectedCharacter.gameObject;
+            gridBehavior.MovingCharacter = charactorSelector.selectedCharacter.gameObject;
         }
         gridBehavior.InitialGridSetup();
         if(GetComponent<ScoutStats>())
         {
             GetComponent<ScoutStats>().actionsLeft--;
         }
-        gridBehavior.gridArray[x, y].GetComponent<GridStats>().occupied = true;
+        gridBehavior.gridPointArray[x, y].GetComponent<GridPointStats>().occupied = true;
         charactorSelector.selectedCharacter = null;
         charactorSelector.resolvingMove = false;
         yield return null;

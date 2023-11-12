@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 
-public class GridStats : MonoBehaviour
+public class GridPointStats : MonoBehaviour
 {
     public int visited = -1;
     public int x = 0;

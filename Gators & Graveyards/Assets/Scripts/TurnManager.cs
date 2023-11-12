@@ -62,7 +62,7 @@ public class TurnManager : MonoBehaviour
         {
             //take turn!
             CharacterMover ghostMover = ghost.GetComponent<CharacterMover>();
-            StartCoroutine(ghostMover.MoveCharacter(ghostMover.currentGridPosition.x - 1, ghostMover.currentGridPosition.y));
+            StartCoroutine(ghostMover.MoveCharacterCoroutine(ghostMover.currentGridPosition.x - 1, ghostMover.currentGridPosition.y));
         }
     }
 }

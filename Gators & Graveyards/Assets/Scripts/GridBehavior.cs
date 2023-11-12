@@ -4,82 +4,87 @@ using UnityEngine;
 
 public class GridBehavior : MonoBehaviour
 {
-    [SerializeField] bool findDistance = false;
-    [SerializeField] int rows = 10;
-    [SerializeField] int columns = 10;
-    [SerializeField] int scale = 1;
+    [SerializeField] int gridRows = 10;
+    [SerializeField] int gridColumns = 10;
+    [SerializeField] int gridScale = 1;
     [SerializeField] GameObject gridPointPrefab;
     [SerializeField] Vector3 bottomLeftLocation = new Vector3(0, 0, 0);
 
-    public GameObject[,] gridArray;
-    [SerializeField] int startX = 0;
-    [SerializeField] int startY = 0;
-    [SerializeField] int endX = 2;
-    [SerializeField] int endY = 2;
-    public GameObject movingCharacter;
+    public GameObject[,] gridPointArray;
+    
+    int _moveStartX = 0;
+    int _moveStartY = 0;
+    int _moveEndX = 2;
+    int _moveEndY = 2;
 
-    public List<GameObject> path = new List<GameObject>();
+    public GameObject MovingCharacter;
+
+    public List<GameObject> MovePath = new List<GameObject>();
 
     // Start is called before the first frame update
     void Awake()
     {
-        gridArray = new GameObject[columns, rows];
-        if (gridPointPrefab)
-        {
-            GenerateGrid();
+        GenerateGrid();
+    }
+
+    void GenerateGrid()
+    {
+        if (gridPointPrefab == null)
+        { 
+            Debug.Log("No grid prefab!");
+            return;
         }
-        else { Debug.Log("No grid prefab!"); }
+        gridPointArray = new GameObject[gridColumns, gridRows];
+
+        for (int gridColumn = 0; gridColumn < gridColumns; gridColumn++)
+        {
+            for (int gridRow = 0; gridRow < gridRows; gridRow++)
+            {
+                var newGridX = bottomLeftLocation.x + gridScale * gridColumn;
+                var newGridY = bottomLeftLocation.y;
+                var newGridZ = bottomLeftLocation.z + gridScale * gridRow;
+                Vector3 newGridPointPos = new(newGridX, newGridY, newGridZ);
+
+                GameObject newGridPoint = Instantiate(gridPointPrefab, newGridPointPos, Quaternion.identity);
+                newGridPoint.transform.SetParent(gameObject.transform);
+                newGridPoint.name = gridColumn + " , " + gridRow;
+
+                GridPointStats newGridPointStats = newGridPoint.GetComponent<GridPointStats>();
+                newGridPointStats.x = gridColumn;
+                newGridPointStats.y = gridRow;
+                newGridPointStats.myCoords.text = newGridPoint.name;
+
+                gridPointArray[gridColumn, gridRow] = newGridPoint;
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool GenerateMovePath(int startX, int startY, int endX, int endY, int moveRange)
     {
-       
-    }
-
-    public bool FindPath(int x, int y, int destX, int destY, int moveRange)
-    {
-        startX = x;
-        startY = y;
-        endX = destX;
-        endY = destY;
+        _moveStartX = startX;
+        _moveStartY = startY;
+        _moveEndX = endX;
+        _moveEndY = endY;
         SetDistance(moveRange);
         if (SetPath())
             return true; 
         else return false ;
     }
 
-    void GenerateGrid()
-    {
-        for (int x = 0; x < columns; x++)
-        {
-            for (int y = 0; y < rows; y++)
-            {
-                Vector3 newGridPointPos = new Vector3(bottomLeftLocation.x + scale * x, bottomLeftLocation.y, bottomLeftLocation.z + scale * y);
-                GameObject newGridPoint = Instantiate(gridPointPrefab, newGridPointPos, Quaternion.identity);
-                newGridPoint.transform.SetParent(gameObject.transform);
-                newGridPoint.GetComponent<GridStats>().x = x;
-                newGridPoint.GetComponent<GridStats>().y = y;
-                newGridPoint.GetComponent<GridStats>().myCoords.text = x + " , " + y;
-                newGridPoint.name = newGridPoint.GetComponent<GridStats>().myCoords.text;
-                gridArray[x, y] = newGridPoint;
-            }
-        }
-    }
 
     void SetDistance(int moveRange)
     {
         InitialGridSetup();
-        int x = startX;
-        int y = startY;
-        int[] testArray = new int[rows * columns];
+        int x = _moveStartX;
+        int y = _moveStartY;
+        int[] testArray = new int[gridRows * gridColumns];
         for (int step = 1; step <= moveRange; step++)
         {
-            foreach(GameObject point in gridArray)
+            foreach(GameObject point in gridPointArray)
             {
-                if(point && point.GetComponent<GridStats>().visited == step - 1)
+                if(point && point.GetComponent<GridPointStats>().visited == step - 1)
                 {
-                    TestFourDirections(point.GetComponent<GridStats>().x, point.GetComponent<GridStats>().y, step);
+                    TestFourDirections(point.GetComponent<GridPointStats>().x, point.GetComponent<GridPointStats>().y, step);
                 }
             }
         }
@@ -88,14 +93,14 @@ public class GridBehavior : MonoBehaviour
     bool SetPath()
     {
         int step;
-        int x = endX;
-        int y = endY;
+        int x = _moveEndX;
+        int y = _moveEndY;
         List<GameObject> tempList = new List<GameObject>();
-        path.Clear();
-        if(gridArray[endX,endY] && gridArray[endX,endY].GetComponent<GridStats>().visited > 0)
+        MovePath.Clear();
+        if(gridPointArray[_moveEndX,_moveEndY] && gridPointArray[_moveEndX,_moveEndY].GetComponent<GridPointStats>().visited > 0)
         {
-            path.Add(gridArray[x, y]);
-            step = gridArray[x, y].GetComponent<GridStats>().visited - 1;
+            MovePath.Add(gridPointArray[x, y]);
+            step = gridPointArray[x, y].GetComponent<GridPointStats>().visited - 1;
         }
         else
         {
@@ -105,17 +110,17 @@ public class GridBehavior : MonoBehaviour
         for (int i = step; step > -1; step--)
         {
             if (TestDirection(x, y, step, 1))
-                tempList.Add(gridArray[x, y + 1]);
+                tempList.Add(gridPointArray[x, y + 1]);
             if (TestDirection(x, y, step, 2))
-                tempList.Add(gridArray[x + 1, y]);
+                tempList.Add(gridPointArray[x + 1, y]);
             if (TestDirection(x, y, step, 3))
-                tempList.Add(gridArray[x, y - 1]);
+                tempList.Add(gridPointArray[x, y - 1]);
             if (TestDirection(x, y, step, 4))
-                tempList.Add(gridArray[x - 1 ,y]); 
-            GameObject tempObj = FindClosestPoint(gridArray[endX, endY].transform, tempList);
-            path.Add(tempObj);
-            x = tempObj.GetComponent<GridStats>().x;
-            y = tempObj.GetComponent<GridStats>().y;
+                tempList.Add(gridPointArray[x - 1 ,y]); 
+            GameObject tempObj = FindClosestPoint(gridPointArray[_moveEndX, _moveEndY].transform, tempList);
+            MovePath.Add(tempObj);
+            x = tempObj.GetComponent<GridPointStats>().x;
+            y = tempObj.GetComponent<GridPointStats>().y;
             tempList.Clear();
         }
         return true;
@@ -123,25 +128,25 @@ public class GridBehavior : MonoBehaviour
 
     public void InitialGridSetup()
     {
-        foreach(GameObject point in gridArray)
+        foreach(GameObject point in gridPointArray)
         {
             if (point)
             {
-                point.GetComponent<GridStats>().visited = -1;
+                point.GetComponent<GridPointStats>().visited = -1;
                 point.GetComponent<GridMouseover>().inRange = false;
             }
         }
         //occupied spaces need to be set to -2 here
         CharacterMover[] allCharacters = FindObjectsOfType<CharacterMover>();
-        if (movingCharacter == null)
+        if (MovingCharacter == null)
         {
-            movingCharacter = FindObjectOfType<CharacterSelector>().selectedCharacter.gameObject;
+            MovingCharacter = FindObjectOfType<CharacterSelector>().selectedCharacter.gameObject;
         }
         foreach(CharacterMover character in allCharacters)
         {
-            if (movingCharacter && movingCharacter.GetComponent<ScoutStats>() && character.GetComponent<GhostStats>())
+            if (MovingCharacter && MovingCharacter.GetComponent<ScoutStats>() && character.GetComponent<GhostStats>())
             {
-                gridArray[character.currentGridPosition.x, character.currentGridPosition.y].GetComponent<GridStats>().visited = -2;
+                gridPointArray[character.currentGridPosition.x, character.currentGridPosition.y].GetComponent<GridPointStats>().visited = -2;
             }
             //else if (movingCharacter && movingCharacter.GetComponent<GhostStats>() && character.GetComponent<ScoutStats>())
             //{
@@ -149,7 +154,7 @@ public class GridBehavior : MonoBehaviour
             //}
         }
         //the movers starting space is set to 0
-        gridArray[startX, startY].GetComponent<GridStats>().visited = 0;
+        gridPointArray[_moveStartX, _moveStartY].GetComponent<GridPointStats>().visited = 0;
 
     }
 
@@ -159,25 +164,25 @@ public class GridBehavior : MonoBehaviour
         switch(direction)
         {
             case 4:
-                if (x - 1 > -1 && gridArray[x - 1, y] && gridArray[x - 1, y].GetComponent<GridStats>().visited == step)
+                if (x - 1 > -1 && gridPointArray[x - 1, y] && gridPointArray[x - 1, y].GetComponent<GridPointStats>().visited == step)
                 {
                     return true;
                 }
                 else return false;
             case 3:
-                if (y - 1 > -1 && gridArray[x, y - 1] && gridArray[x, y - 1].GetComponent<GridStats>().visited == step)
+                if (y - 1 > -1 && gridPointArray[x, y - 1] && gridPointArray[x, y - 1].GetComponent<GridPointStats>().visited == step)
                 {
                     return true;
                 }
                 else return false;
             case 2:
-                if (x + 1 < columns && gridArray[x + 1, y] && gridArray[x + 1, y].GetComponent<GridStats>().visited == step)
+                if (x + 1 < gridColumns && gridPointArray[x + 1, y] && gridPointArray[x + 1, y].GetComponent<GridPointStats>().visited == step)
                 {
                     return true;
                 }
                 else return false;
             case 1:
-                if (y + 1 < rows && gridArray[x, y + 1] && gridArray[x, y + 1].GetComponent<GridStats>().visited == step)
+                if (y + 1 < gridRows && gridPointArray[x, y + 1] && gridPointArray[x, y + 1].GetComponent<GridPointStats>().visited == step)
                 {
                     return true;
                 }
@@ -202,16 +207,16 @@ public class GridBehavior : MonoBehaviour
 
     void SetVisitedPoint(int x, int y, int step)
     {
-        if (gridArray[x,y])
+        if (gridPointArray[x,y])
         {
-            gridArray[x, y].GetComponent<GridStats>().visited = step;
-            gridArray[x, y].GetComponent<GridMouseover>().inRange = true;
+            gridPointArray[x, y].GetComponent<GridPointStats>().visited = step;
+            gridPointArray[x, y].GetComponent<GridMouseover>().inRange = true;
         }
     }
 
     GameObject FindClosestPoint(Transform targetLocation, List<GameObject> list)
     {
-        float currentDistance = scale * rows * columns;
+        float currentDistance = gridScale * gridRows * gridColumns;
         int indexNumber = 0;
         for(int i = 0; i < list.Count; i++)
         {

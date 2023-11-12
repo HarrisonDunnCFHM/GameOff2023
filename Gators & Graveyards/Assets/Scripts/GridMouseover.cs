@@ -18,14 +18,14 @@ public class GridMouseover : MonoBehaviour
     GameObject hoveredPoint;
 
     GridBehavior gridBehavior;
-    GridStats myGridStats;
+    GridPointStats myGridStats;
     CharacterSelector characterSelector;
 
     // Start is called before the first frame update
     void Start()
     {
         gridBehavior = FindObjectOfType<GridBehavior>();
-        myGridStats = GetComponent<GridStats>();
+        myGridStats = GetComponent<GridPointStats>();
         characterSelector = FindObjectOfType<CharacterSelector>();
     }
 
@@ -63,14 +63,15 @@ public class GridMouseover : MonoBehaviour
         {
 
 
-            if (gridBehavior.FindPath(characterSelector.selectedCharacter.currentGridPosition.x,
+            if (gridBehavior.GenerateMovePath(characterSelector.selectedCharacter.currentGridPosition.x,
                                 characterSelector.selectedCharacter.currentGridPosition.y,
                                 myGridStats.x, myGridStats.y,
                                 characterSelector.selectedCharacter.GetComponent<ScoutStats>().maxMoveRange))
             {
                 GameObject newPath = Instantiate(pathIndicatorPrefab, characterSelector.selectedCharacter.transform.position, Quaternion.identity);
                 pathIndicator = newPath.GetComponent<MovePathIndicator>();
-                pathIndicator.GenerateMovePathIndicator(gridBehavior.path);
+                List<GameObject> tempPath = gridBehavior.MovePath;
+                pathIndicator.GenerateMovePathIndicator(tempPath);
             }
         }
     }
@@ -92,7 +93,7 @@ public class GridMouseover : MonoBehaviour
         if(hoveredPoint && characterSelector.selectedCharacter && !myGridStats.occupied)
         {
 
-            if (gridBehavior.FindPath(characterSelector.selectedCharacter.currentGridPosition.x,
+            if (gridBehavior.GenerateMovePath(characterSelector.selectedCharacter.currentGridPosition.x,
                                 characterSelector.selectedCharacter.currentGridPosition.y,
                                 myGridStats.x, myGridStats.y,
                                 characterSelector.selectedCharacter.GetComponent<ScoutStats>().maxMoveRange))
@@ -102,7 +103,7 @@ public class GridMouseover : MonoBehaviour
                     Destroy(pathIndicator.gameObject);
                     pathIndicator = null;
                 }
-                StartCoroutine(characterSelector.selectedCharacter.MoveCharacter(myGridStats.x, myGridStats.y));
+                StartCoroutine(characterSelector.selectedCharacter.MoveCharacterCoroutine(myGridStats.x, myGridStats.y));
             }
         }
     }
